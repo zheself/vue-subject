@@ -1,0 +1,32 @@
+{
+  "name": "smartabode-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@kousum/semi-ui-vue": "^2.74.0",
+    "ant-design-vue": "^4.2.6",
+    "ant-design-x-vue": "^1.0.1",
+    "antd": "^5.24.2",
+    "axios": "^1.7.9",
+    "canvas-image-utils": "^2.5.0",
+    "element-plus": "^2.9.4",
+    "fabric": "^5.5.1",
+    "photoswipe": "^5.4.4",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "@vue/babel-plugin-jsx": "^1.2.5",
+    "sass": "^1.85.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.1.0"
+  }
+}
