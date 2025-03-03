@@ -30,7 +30,7 @@ const deleteRecordDialog = ref(false)
 // 查看“更多”的对话话
 const showMoreMenu = (event) => {
   event.stopPropagation()
-  
+
 };
 
 // 处理鼠标点击事件
@@ -157,39 +157,35 @@ const handleLogout = () => {
             </transition>
           </template>
           <div class="scrollable-menu">
-  <el-menu-item-group>
-    <template #title>今天</template>
-  </el-menu-item-group>
+            <el-menu-item-group>
+              <template #title>今天</template>
+            </el-menu-item-group>
 
-  <el-menu-item-group title="7天内">
-    <el-menu-item v-for="(item, index) in historyList" :key="index" @mouseenter="handleMouseEnter(index)"
-      @mouseleave="handleMouseLeave" @click="navigateTo(index)"
-      :class="{ 'menu-item-hover': hoveredIndex === index, 'menu-item-active': isActive}"
-      style="position: relative; padding-right: 20px;">
-      {{ item.title }}
-      <el-dropdown placement="bottom" trigger="click" style="position: absolute; right: 0;" :teleported="false">
-        <el-icon v-show="hoveredIndex === index" class="more-icon" @click.stop="showMoreMenu">
-          <More />
-        </el-icon>
-        <template #dropdown>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.stop><el-button text>重命名</el-button></el-dropdown-item>
-            <el-dropdown-item @click.stop><el-button text type="danger" @click="deleteRecordDialog = true">删除</el-button></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </el-menu-item>
-  </el-menu-item-group>
+              <el-menu-item-group title="7天内">
+                <el-menu-item v-for="(item, index) in historyList" :key="index" @mouseenter="handleMouseEnter(index)"
+                  @mouseleave="handleMouseLeave" @click="navigateTo(index)"
+                  :class="{ 'menu-item-hover': hoveredIndex === index, 'menu-item-active': isActive}"
+                  style="position: relative; padding-right: 20px;">
+                  {{ item.title }}
+                  <el-dropdown placement="bottom" trigger="click" style="position: absolute; right: 0;" :teleported="false">
+                    <el-icon v-show="hoveredIndex === index" class="more-icon" @click.stop="showMoreMenu">
+                      <More />
+                    </el-icon>
+                    <template #dropdown>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item @click.stop><el-button text>重命名</el-button></el-dropdown-item>
+                        <el-dropdown-item @click.stop><el-button text type="danger" @click="deleteRecordDialog = true">删除</el-button></el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+                </el-menu-item>
+              </el-menu-item-group>
 
-  <el-menu-item index="history">
-    更多历史对话
-  </el-menu-item>
-</div>
+              <el-menu-item index="history">
+                更多历史对话
+              </el-menu-item>
+          </div>
 
-<!-- 右侧的内容区域，通过 router-view 渲染 -->
-<el-main>
-  <router-view></router-view> <!-- 使用 router-view 渲染右侧界面 -->
-</el-main>
 
         </el-sub-menu>
 
@@ -255,7 +251,7 @@ const handleLogout = () => {
 }
 
 .sidebar-container {
- 
+
   border-right: 1px solid #EBEDF0;
   transition: width 0.3s;
   display: flex;
@@ -365,8 +361,8 @@ const handleLogout = () => {
 }
 
 
-/* 
-  用户信息区域 
+/*
+  用户信息区域
 */
 .user-profile-container {
   margin-top: auto;

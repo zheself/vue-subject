@@ -7,11 +7,13 @@
             </div>
             <form @submit.prevent="handleLogin" class="floating-form">
                 <div class="input-group">
+                    <!-- 去掉 .value -->
                     <input id="username" v-model.trim="loginForm.username" type="text" autocomplete="off" @input="validateInput" required />
                     <label for="username">用户名</label>
                     <span class="highlight"></span>
                 </div>
                 <div class="input-group">
+                    <!-- 去掉 .value -->
                     <input id="password" v-model.trim="loginForm.password" type="password" autocomplete="off" @input="validateInput" required />
                     <label for="password">密码</label>
                     <span class="highlight"></span>
@@ -31,86 +33,75 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const router = useRouter()
+const router = useRouter();
 
 // 表单数据
-const loginForm = reactive({
+const loginForm = ref({
     username: '',
     password: ''
-})
+});
 
-const errorMsg = ref('')
-const isFormValid = ref(false)
+const errorMsg = ref('');
+const isFormValid = ref(false);
 
 // 输入验证
 const validateInput = () => {
     // 基本验证
-    if (loginForm.username && loginForm.password) {
-        isFormValid.value = true
-        errorMsg.value = ''
+    if (loginForm.value.username && loginForm.value.password) {
+        isFormValid.value = true;
+        errorMsg.value = '';
     } else {
-        isFormValid.value = false
+        isFormValid.value = false;
     }
-}
+};
 
 // 登录处理
 const handleLogin = async () => {
     // 防止XSS攻击
-    const xssPattern = /(~|\{|\}|"|'|<|>|\?)/g
-    if (xssPattern.test(loginForm.username) || xssPattern.test(loginForm.password)) {
+    const xssPattern = /(~|\{|\}|"|'|<|>|\?)/g;
+    if (xssPattern.test(loginForm.value.username) || xssPattern.test(loginForm.value.password)) {
         errorMessage('警告:输入内容包含非法字符');
         return;
     }
 
-    // 预设固定账号
-    const validUsername = "NPU";
-    const validPassword = "2025NPU";
-
-    if (loginForm.username === validUsername && loginForm.password === validPassword) {
-        // 模拟登录成功，存储 token（这里仅作示例）
-        const expires = new Date(Date.now() + 3600 * 1000).toUTCString();
-        document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`;
-
-        // 跳转到主页
-        router.push('/');
-        return;
-    }
-
     try {
-        // 对输入进行转义处理
-        const safeUsername = encodeURIComponent(loginForm.username);
-        const safePassword = encodeURIComponent(loginForm.password);
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(loginForm.value)
+        });
 
-        // 实际的登录API调用
-        console.log('登录请求:', { username: safeUsername, password: safePassword });
+        const result = await response.json();
+        if (response.ok) {
+            // 模拟登录成功，存储 token（这里仅作示例）
+            const expires = new Date(Date.now() + 3600 * 1000).toUTCString();
+            document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`;
 
-        // 模拟登录成功并设置cookie，设置过期时间为1小时
-        const expires = new Date(Date.now() + 3600 * 1000).toUTCString();
-        document.cookie = `authToken=yourAuthToken; path=/; expires=${expires}`;
-
-        // 跳转到主页
-        router.push('/home');
+            // 跳转到主页
+            router.push('/');
+        } else {
+            errorMessage(result.message);
+        }
     } catch (error) {
+        console.error('登录请求出错:', error);
         errorMessage('登录失败，请稍后重试');
     }
 };
 
-
 // 错误提示
 const errorMessage = (text) => {
-    errorMsg.value = text
+    errorMsg.value = text;
     setTimeout(() => {
-        errorMsg.value = ''
-    }, 3000)
-}
+        errorMsg.value = '';
+    }, 3000);
+};
 
 onMounted(() => {
-    validateInput()
-})
-
+    validateInput();
+});
 </script>
 
 <style scoped>

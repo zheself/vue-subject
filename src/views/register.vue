@@ -16,12 +16,6 @@
                     <label for="email">邮箱地址</label>
                     <span class="highlight"></span>
                 </div>
-                <div class="input-group verification-group">
-                    <input type="text" id="verificationCode" v-model="verificationCode" required maxlength="6" />
-                    <label for="verificationCode">验证码</label>
-                    <button type="button" @click="sendVerificationCode" class="send-code-btn">获取验证码</button>
-                    <span class="highlight"></span>
-                </div>
                 <div class="input-group">
                     <input type="password" id="password" v-model="password" required minlength="6" maxlength="20" />
                     <label for="password">密码</label>
@@ -47,27 +41,54 @@
 
 <script setup>
 import { ref } from 'vue'
+import Swal from 'sweetalert2'
 
 const username = ref('')
 const email = ref('')
-const verificationCode = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 
-const handleRegister = () => {
-    console.log({
+const handleRegister = async () => {
+    const newUser = {
         username: username.value,
         email: email.value,
-        verificationCode: verificationCode.value,
-        password: password.value,
-        confirmPassword: confirmPassword.value
-    })
-}
+        password: password.value
+    }
 
-const sendVerificationCode = () => {
-    console.log('Sending verification code to:', email.value)
+    try {
+        const response = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newUser)
+        })
+
+        const result = await response.json()
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: '恭喜您',
+                text: '注册成功！',
+                confirmButtonText: '确定'
+            })
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: '哎呀',
+                text: result.message || '注册失败，请稍后重试。',
+                confirmButtonText: '确定'
+            })
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: '哎呀',
+            text: '注册失败，请稍后重试。',
+            confirmButtonText: '确定'
+        })
+    }
 }
 </script>
+
 
 <style scoped>
 .register-wrapper {
