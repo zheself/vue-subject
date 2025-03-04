@@ -10,8 +10,8 @@ const routes = [
         component: () => import('@/views/register.vue')
     },
     {
-        path: '/handleUserInfo',
-        component: () => import('@/views/handleUserInfo.vue')
+        path: '/usercenter',
+        component: () => import('@/views/usercenter.vue')
     },
     {
         path: '/',
