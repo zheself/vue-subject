@@ -31,8 +31,8 @@ const routes = [
                 component: () => import('@/views/visualQuestion/show.vue'),
             },
             {
-                path: '/history',
-                component: () => import('@/views/visualQuestion/allHistoryRecord.vue')
+                path: '/history:id',
+                component: () => import('@/views/visualQuestion/AllHistoryRecord.vue')
             },
 
         ]

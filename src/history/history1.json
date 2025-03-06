@@ -1,0 +1,20 @@
+[
+  {
+    "role": "system",
+    "id": "1",
+    "createAt": 1715676751919,
+    "content": "Hello, I'm your AI assistant."
+  },
+  {
+    "role": "user",
+    "id": "2",
+    "createAt": 1715676751919,
+    "content": "给一个 Semi Design 的 Button 组件的使用示例"
+  },
+  {
+    "role": "system",
+    "id": "3",
+    "createAt": 1715676751919,
+    "content": "以下是一个 Semi 代码的使用示例：\n```jsx \nimport React from 'react';\nimport { Button } from '@kousum/semi-ui-vue';\n\nconst MyComponent = () => {\n  return (\n    <Button>Click me</Button>\n );\n};\nexport default MyComponent;\n```\n"
+  }
+]

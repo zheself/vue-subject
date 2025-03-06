@@ -1,7 +1,7 @@
 <script setup>
 import Welcome from '@/views/component/Welcome.vue';
 import tips from '@/views/component/tips.vue';
-import sendmessage from '@/views/component/sendmessage.vue';
+import chat from '@/views/component/chat.vue';
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import sendmessage from '@/views/component/sendmessage.vue';
           </div>
         </div>
         <div class="conversation-container">
-            <sendmessage/>
+            <chat/>
         </div>
 </template>
 
@@ -26,14 +26,14 @@ import sendmessage from '@/views/component/sendmessage.vue';
 }
 
 .welcome-container {
-  margin-right: 250px;
+  margin-right: 310px;
   margin-left: 250px;
   margin-top: 70px;
   padding: 20px; /* 内边距 */
   background-color: transparent; /* 透明背景 */
 }
 .tips-container{
-  margin-right: 250px;
+  margin-right: 310px;
   margin-left: 250px;
   padding: 20px; /* 内边距 */
   background-color: transparent; /* 透明背景 */

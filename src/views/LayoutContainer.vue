@@ -8,13 +8,13 @@ import { ElMessageBox } from 'element-plus'
 // 响应式状态
 const isCollapse = ref(false)
 const historyList = ref([
-  { id: 1, title: '对话记录1', time: '10:30' },
-  { id: 2, title: '对话记录2', time: '11:45' },
-  { id: 3, title: '对话记录3', time: '11:45' },
-  { id: 4, title: '对话记录4', time: '11:45' },
-  { id: 5, title: '对话记录5', time: '11:45' },
-  { id: 6, title: '对话记录6', time: '11:45' },
-  { id: 7, title: '对话记录7', time: '11:45' },
+  { id: 1, title: '走廊改造', time: '10:30' },
+  { id: 2, title: '屋内家具选用', time: '11:45' },
+  { id: 3, title: '卧室改造', time: '11:45' },
+  { id: 4, title: '适老化改造怎么进行', time: '11:45' },
+  { id: 5, title: '老年人家里应该注意什么', time: '11:45' },
+  { id: 6, title: '厕所改造', time: '11:45' },
+  { id: 7, title: '厨房改造', time: '11:45' },
   { id: 8, title: '对话记录8', time: '11:45' },
   { id: 9, title: '对话记录9', time: '11:45' },
   // 更多记录...
@@ -47,11 +47,12 @@ const handleUserInfo = () => {
   router.push('/usercenter')
 }
 
-// 路由跳转
-const navigateTo = (index) => {
-  // 执行路由跳转
-  router.push(`/${index}`);
+// 修改路由跳转逻辑，改为 history + id 的形式
+const navigateTo = (item) => {
+    // 执行路由跳转并传递参数
+    router.push(`/history${item.id}`);
 };
+
 
 
 // 切换折叠状态
@@ -163,7 +164,7 @@ const handleLogout = () => {
 
               <el-menu-item-group title="7天内">
                 <el-menu-item v-for="(item, index) in historyList" :key="index" @mouseenter="handleMouseEnter(index)"
-                  @mouseleave="handleMouseLeave" @click="navigateTo(index)"
+                  @mouseleave="handleMouseLeave" @click="navigateTo(item)"
                   :class="{ 'menu-item-hover': hoveredIndex === index, 'menu-item-active': isActive}"
                   style="position: relative; padding-right: 20px;">
                   {{ item.title }}
@@ -235,7 +236,7 @@ const handleLogout = () => {
     </el-aside>
     <el-container>
       <el-main>
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
       </el-main>
     </el-container>
   </el-container>
