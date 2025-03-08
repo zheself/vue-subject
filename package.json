@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@kousum/semi-ui-vue": "^2.74.0",
+    "@mkkellogg/gaussian-splats-3d": "^0.4.6",
     "ant-design-vue": "^4.2.6",
     "ant-design-x-vue": "^1.0.1",
     "antd": "^5.24.2",
@@ -24,6 +25,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sweetalert2": "^11.17.2",
+    "three": "^0.174.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },

@@ -47,7 +47,7 @@ const routes = [
     },
     {
         path: '/reconstruction/view',
-        component: () => import('@/views/reconstruction/videocheck.vue')
+        component: () => import('@/views/reconstruction/ModelView.vue')
     }
 ]
 
