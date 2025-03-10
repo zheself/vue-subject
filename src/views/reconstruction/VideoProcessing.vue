@@ -1,8 +1,41 @@
+<script setup>
+import { ref } from 'vue';
+import progreesing from '@/views/component/progress.vue';
+
+// 定义一个响应式变量，用于控制 progreesing 组件的显示
+const isProcessing = ref(false);
+
+// 开始处理的方法，点击按钮时调用
+const startProcessing = () => {
+  isProcessing.value = true;
+};
+
+// 这里可以添加其他方法，如 startTraining、viewPointCloud、cancel 等
+const startTraining = () => {
+  // 处理开始训练的逻辑
+};
+
+const viewPointCloud = () => {
+  // 处理查看点云结构的逻辑
+};
+
+const cancel = () => {
+  // 处理取消的逻辑
+};
+
+// 模拟日志信息
+const log = ref('');
+</script>
+
 <template>
   <div class="container">
     <!-- 视频上传区域 -->
     <div class="video-upload">
-      <p class="video-upload-text">请上传视频</p>
+      <!-- 根据 isProcessing 的值决定是否显示进度条及提示文字 -->
+      <div v-if="isProcessing" class="progress-container">
+        <p class="processing-tip">正在处理视频，请稍后</p>
+        <progreesing />
+      </div>
     </div>
 
     <!-- 操作按钮区域 -->
@@ -35,30 +68,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      log: "Feature extraction\n[20241231]\nCreating SIFT GPU current image[3/42]\n...",
-    };
-  },
-  methods: {
-    startProcessing() {
-      console.log("开始处理视频...");
-    },
-    startTraining() {
-      console.log("开始训练...");
-    },
-    viewPointCloud() {
-      console.log("查看点云结构...");
-    },
-    cancel() {
-      console.log("取消操作...");
-    },
-  },
-};
-</script>
-
 <style scoped>
 /* 容器布局 */
 .container {
@@ -86,6 +95,22 @@ export default {
   font-weight: bold;
   color: #333;
   padding: 20px;
+}
+
+/* 进度条容器样式 */
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 处理提示文字样式 */
+.processing-tip {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 /* 侧边栏区域 */
@@ -137,7 +162,6 @@ export default {
 .sidebar-btn .el-icon {
   margin-right: 5px; /* 图标与文字的间距 */
 }
-
 
 /* 数据处理信息样式 */
 .processing-info {

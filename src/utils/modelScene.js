@@ -163,56 +163,104 @@ export class ModelScene {
 
     // 初始化GUI界面
     initGUI() {
-        this.stats = new Stats()
-        // 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
-        this.stats.setMode(0)
-        // 设置监视器位置
-        this.stats.domElement.style.position = 'absolute'
-        this.stats.domElement.style.left = '0px'
-        this.stats.domElement.style.top = '0px'
-        document.body.appendChild(this.stats.dom);
+    this.stats = new Stats()
+    // 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
+    this.stats.setMode(0)
+    // 设置监视器位置
+    this.stats.domElement.style.position = 'absolute'
+    this.stats.domElement.style.left = '0px'
+    this.stats.domElement.style.top = '0px'
+    document.body.appendChild(this.stats.dom);
 
 
-        if (this.gui) this.gui.destroy();
-        this.gui = new GUI()
+    if (this.gui) this.gui.destroy();
+    this.gui = new GUI()
 
-        let fullFcreenObject = {
-            Fullscreen: () => {
-                this.#toggleFullScreen()
-            }
+    let fullFcreenObject = {
+        Fullscreen: () => {
+            this.#toggleFullScreen()
         }
-        this.gui.add(fullFcreenObject, "Fullscreen").name("全屏进入自由模式")
-        let cameraFolder = this.gui.addFolder("摄像机工具")
-        let imageFolder = this.gui.addFolder("图片管理工具")
+    }
+    this.gui.add(fullFcreenObject, "Fullscreen").name("全屏进入自由模式")
+    let cameraFolder = this.gui.addFolder("摄像机工具")
+    let imageFolder = this.gui.addFolder("图片管理工具")
 
-        let cameraController = {
-            prev: () => this.switchCamera(-1),
-            next: () => this.switchCamera(1),
+    let cameraController = {
+        prev: () => this.switchCamera(-1),
+        next: () => this.switchCamera(1),
 
-            fov: this.camera.fov, // 绑定相机的 fov 属性
-            reset: () => this.#resetCamera()
+        fov: this.camera.fov, // 绑定相机的 fov 属性
+        reset: () => this.#resetCamera()
+    }
+    let imageController = {
+        download: () => {
+            // 下载图片
+            this.#downloadImage();
+        },
+        save: () => {
+            this.renderer.render(this.scene, this.camera); // 确保画面是最新的
+            const canvas = this.renderer.domElement;
+
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    const formData = new FormData();
+                    formData.append('image', blob, 'new_perspective.jpg');
+
+                    fetch('http://localhost:3000/api/save-image', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error('图片保存失败:', error);
+                        alert('图片保存失败');
+                    });
+                }
+            }, 'image/jpeg');
         }
-        let imageController = {
-            download: () => {
-                // 下载图片
-
-            },
-            save: () => {
-                // 保存图片到背景库
-            }
-        }
-
-        cameraFolder.add(cameraController, 'prev').name('- Previous')
-        cameraFolder.add(cameraController, 'next').name('+ Next')
-        cameraFolder.add(cameraController, 'reset').name('复位')
-        cameraFolder.add(this.camera, 'fov').min(10).max(89).name("fov").onChange((value) => {
-            this.camera.fov = value
-            this.camera.updateProjectionMatrix(); // 更新投影矩阵
-        })
-        imageFolder.add(imageController, 'save').name('保存新视角')
-        imageFolder.add(imageController, 'download').name('下载新视角')
 
     }
+
+    cameraFolder.add(cameraController, 'prev').name('- Previous')
+    cameraFolder.add(cameraController, 'next').name('+ Next')
+    cameraFolder.add(cameraController, 'reset').name('复位')
+    cameraFolder.add(this.camera, 'fov').min(10).max(89).name("fov").onChange((value) => {
+        this.camera.fov = value
+        this.camera.updateProjectionMatrix(); // 更新投影矩阵
+    })
+    imageFolder.add(imageController, 'save').name('保存新视角')
+    imageFolder.add(imageController, 'download').name('下载新视角')
+}
+
+// 新增下载图片方法
+#downloadImage() {
+    // 手动渲染一次，确保画布内容是最新的
+    this.renderer.render(this.scene, this.camera);
+
+    // 获取渲染器的画布
+    const canvas = this.renderer.domElement;
+
+    // 将画布内容转换为Blob对象
+    canvas.toBlob((blob) => {
+        if (blob) {
+            // 创建一个临时的<a>元素
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'new_perspective.png'; // 下载的文件名
+
+            // 模拟点击<a>元素来触发下载
+            link.click();
+
+            // 释放URL对象
+            URL.revokeObjectURL(link.href);
+        }
+    }, 'image/png');
+}
+
     // 相机切换方法
     switchCamera(step) {
         this.currentCameraIndex = (this.currentCameraIndex + step + this.cameraPresets.length) % this.cameraPresets.length;
