@@ -34,6 +34,10 @@ const routes = [
                 path: '/history:id',
                 component: () => import('@/views/visualQuestion/AllHistoryRecord.vue')
             },
+            {
+                path: '/interact',
+                component: () => import('@/views/component/interact.vue')
+            },
 
         ]
     },

@@ -1,21 +1,27 @@
 <script setup>
-import Welcome from '@/views/component/Welcome.vue';
-import tips from '@/views/component/tips.vue';
-import chat from '@/views/component/chat.vue';
+import { useRouter } from 'vue-router'
+import Welcome from '@/views/component/Welcome.vue'
+import tips from '@/views/component/tips.vue'
+import { ElButton } from 'element-plus'
+
+const router = useRouter()
+const handleClick = () => {
+  router.push('/interact')
+}
 </script>
 
 <template>
-<div class="wrap">
-          <div class="welcome-container">
-            <Welcome/>
-          </div>
-          <div class="tips-container">
-            <tips/>
-          </div>
-        </div>
-        <div class="conversation-container">
-            <chat/>
-        </div>
+  <div class="wrap">
+    <div class="welcome-container">
+      <Welcome />
+    </div>
+    <div class="tips-container">
+      <tips />
+    </div>
+    <div class="button-container">
+      <el-button type="success" @click="handleClick">开始使用！</el-button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -32,17 +38,19 @@ import chat from '@/views/component/chat.vue';
   padding: 20px; /* 内边距 */
   background-color: transparent; /* 透明背景 */
 }
-.tips-container{
+
+.tips-container {
   margin-right: 310px;
   margin-left: 250px;
   padding: 20px; /* 内边距 */
   background-color: transparent; /* 透明背景 */
 }
-.conversation-container{
-  margin-right: 250px;
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 310px;
   margin-left: 250px;
-  margin-top: 70px;
-  padding: 20px; /* 内边距 */
-  background-color: transparent; /* 透明背景 */
+  padding: 20px;
 }
 </style>
