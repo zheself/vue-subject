@@ -86,9 +86,12 @@ export default {
     const mode = ref('bubble');
     const align = ref('leftRight');
 
+    let currentSessionId = null; // 初始化会话id
+
     const onMessageSend = async (content, attachment) => {
       const userInput = content;
       const images = attachment;
+
 
       const formData = new FormData();
       formData.append("user_input", userInput);
@@ -99,17 +102,22 @@ export default {
         });
       }
 
+      // 🌟 确保带上 session_id（如果有的话）
+      if (currentSessionId) {
+        formData.append("session_id", currentSessionId);
+      }
+
       try {
-        // 🎯 第一步：上传文本和图片，获取 session_id
+        // 🎯 第一步：上传文本和图片，获取/继续 session_id
         const uploadResponse = await axios.post("http://127.0.0.1:8000/chat/stream", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
 
-        const sessionId = uploadResponse.data.session_id;
-        console.log("✅ 上传成功，session_id:", sessionId);
+        currentSessionId = uploadResponse.data.session_id;
+        console.log("✅ 上传成功，session_id:", currentSessionId);
 
         // 🚀 第二步：建立 EventSource 连接，接收流式回复
-        const eventSource = new EventSource(`http://127.0.0.1:8000/chat/stream?session_id=${sessionId}`);
+        const eventSource = new EventSource(`http://127.0.0.1:8000/chat/stream?session_id=${currentSessionId}`);
 
         let accumulatedContent = ""; // 🌟 累积内容
 
@@ -173,6 +181,13 @@ export default {
       } catch (error) {
         console.error("Request error:", error);
       }
+    };
+
+    // ✨ 新增一个重置对话的功能
+    const resetChat = () => {
+      currentSessionId = null; // 清空 session
+      message.value = [];
+      console.log("🔄 已重置会话");
     };
 
 
